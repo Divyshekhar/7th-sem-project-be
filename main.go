@@ -9,7 +9,8 @@ import (
 func init() {
 	initializers.LoadEnv()
 	initializers.ConnectDb()
-	// initializers.Migrate()
+	initializers.Migrate()
+	// initializers.SeedSubjects()
 }
 
 func main() {
@@ -20,6 +21,7 @@ func main() {
 	})
 
 	routes.RegisterUserRoutes(router)
+	routes.RegisterQuestionRoutes(router)
 
 	router.Run(":8080")
 }
