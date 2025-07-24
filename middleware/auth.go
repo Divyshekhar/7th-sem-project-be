@@ -34,5 +34,6 @@ func RequireAuth() gin.HandlerFunc {
 		}
 		userId := claims["user_id"]
 		ctx.Set("user_id", userId)
+		ctx.Next()
 	}
 }
