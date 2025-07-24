@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Divyshekhar/7th-sem-project-be/initializers"
 	intializers "github.com/Divyshekhar/7th-sem-project-be/initializers"
 	"github.com/gin-gonic/gin"
 )
@@ -8,6 +9,7 @@ import (
 func init() {
 	intializers.LoadEnv()
 	intializers.ConnectDb()
+	initializers.Migrate()
 }
 
 func main() {
