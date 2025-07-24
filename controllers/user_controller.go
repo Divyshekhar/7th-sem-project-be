@@ -10,9 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
-func Create(ctx *gin.Context) {
+func CreateUser(ctx *gin.Context) {
 	var body struct {
 		Name     string `json:"name"`
 		Email    string `json:"email"`
@@ -41,7 +42,7 @@ func Create(ctx *gin.Context) {
 		"user_id": user.ID,
 		"exp":     time.Now().Add(72 * time.Hour).Unix(),
 	})
-	tokenStr, err := token.SignedString(os.Getenv("SECRET"))
+	tokenStr, err := token.SignedString([]byte(os.Getenv("SECRET")))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "error creating jwt string"})
 		return
@@ -76,14 +77,22 @@ func Login(ctx *gin.Context) {
 		"user_id": user.ID,
 		"exp":     time.Now().Add(72 * time.Hour).Unix(),
 	})
-	tokenStr, err := token.SignedString(os.Getenv("SECRET"))
-	if err != nil{
+	tokenStr, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "error signing jwt"})
 		return
 	}
 	ctx.SetCookie("jwt_token", tokenStr, 3600*72, "/", "localhost", false, true)
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "User logged in",
-		"user" : user,
+		"user":    user,
 	})
+}
+
+func Logout(ctx *gin.Context) {
+	ctx.SetCookie("jwt_token", "", -1, "/", "localhost", false, true)
+}
+// remove in prod
+func Delete(ctx *gin.Context) {
+	initializers.Db.Session(&gorm.Session{AllowGlobalUpdate: true}).Delete(&models.User{})
 }
