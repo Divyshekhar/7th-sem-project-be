@@ -9,7 +9,7 @@ import (
 func init() {
 	initializers.LoadEnv()
 	initializers.ConnectDb()
-	initializers.Migrate()
+	// initializers.Migrate()
 	// initializers.SeedSubjects()
 }
 

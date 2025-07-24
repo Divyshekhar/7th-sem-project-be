@@ -15,7 +15,6 @@ func SeedSubjects() error {
 	}
 
 	for _, s := range subjects {
-		// This avoids duplicates
 		Db.FirstOrCreate(&s, models.Subject{Name: s.Name})
 	}
 	return nil
