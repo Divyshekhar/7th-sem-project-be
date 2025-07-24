@@ -2,14 +2,13 @@ package main
 
 import (
 	"github.com/Divyshekhar/7th-sem-project-be/initializers"
-	intializers "github.com/Divyshekhar/7th-sem-project-be/initializers"
 	"github.com/gin-gonic/gin"
 )
 
 func init() {
-	intializers.LoadEnv()
-	intializers.ConnectDb()
-	initializers.Migrate()
+	initializers.LoadEnv()
+	initializers.ConnectDb()
+	// initializers.Migrate()
 }
 
 func main() {
