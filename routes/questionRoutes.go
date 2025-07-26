@@ -9,6 +9,7 @@ import (
 func RegisterQuestionRoutes(ctx *gin.Engine){
 	questionGroup := ctx.Group("/question")
 	{
-		questionGroup.POST("/:subject", middleware.RequireAuth(), controllers.GetQuestions)	
+		questionGroup.POST("/:subject", middleware.RequireAuth(), controllers.GenerateQuestions)	
+		questionGroup.GET("/:subject", middleware.RequireAuth(), controllers.GetQuestion)
 	}
 }
