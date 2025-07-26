@@ -133,22 +133,16 @@ func GetUserSubjectQuestions(user models.User, subjectName string) ([]models.Que
 func Generate(user models.User, subject string) (string, error) {
 	ctx := context.Background()
 	pastQuestions, _ := GetUserSubjectQuestions(user, subject)
-	fmt.Println("GetUserSubjectQuestions is DONEEEEEEEEE")
 	prompt := buildPrompt(subject, pastQuestions)
-	fmt.Println("Build Prompt is DONEEEEEEE")
 	llm, err := googleai.New(ctx, googleai.WithAPIKey(os.Getenv("GEMINI_API")), googleai.WithDefaultModel("gemini-2.0-flash"))
 	if err != nil {
 		return "", err
 	}
-	fmt.Println("GOOGLEAI.NEW DONEEEEEEE")
 	output, err := llm.Call(ctx, prompt)
 	if err != nil {
 		return "", err
 	}
-	fmt.Println("LLM.CALL DONEEEEEEE")
 	qaPairs := ParseQABlock(output)
-	fmt.Println("Parse DONEEEEE")
 	SaveQuestion(user, subject, qaPairs)
-	fmt.Println("SaveQuestion Doneeeee")
 	return output, nil
 }
