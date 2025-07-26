@@ -7,6 +7,7 @@ import (
 
 	"github.com/Divyshekhar/7th-sem-project-be/initializers"
 	"github.com/Divyshekhar/7th-sem-project-be/models"
+	"github.com/Divyshekhar/7th-sem-project-be/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -92,7 +93,55 @@ func Login(ctx *gin.Context) {
 func Logout(ctx *gin.Context) {
 	ctx.SetCookie("jwt_token", "", -1, "/", "localhost", false, true)
 }
+
 // remove in prod
 func Delete(ctx *gin.Context) {
 	initializers.Db.Session(&gorm.Session{AllowGlobalUpdate: true}).Delete(&models.User{})
+}
+
+func Update(ctx *gin.Context) {
+	user, ok := utils.CheckUser(ctx)
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "no token or invalid token"})
+		return
+	}
+	var updates map[string]interface{}
+	if err := ctx.ShouldBindJSON(&updates); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON body"})
+		return
+	}
+	allowed := map[string]bool{
+		"name":     true,
+		"email":    true,
+		"password": true,
+	}
+	safeUpdates := map[string]interface{}{}
+	for key, value := range updates {
+		if allowed[key] {
+			safeUpdates[key] = value
+		}
+	}
+	if pw, ok := safeUpdates["password"].(string); ok {
+		hashedPass, err := bcrypt.GenerateFromPassword([]byte(pw), 14)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "error creating hash while updating account"})
+			return
+		}
+		safeUpdates["password"] = hashedPass
+	}
+
+	if len(safeUpdates) == 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "No valid fields to update"})
+		return
+	}
+
+	if err := initializers.Db.Model(&user).Updates(safeUpdates).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user details"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "User data updated successfully",
+		"patient": user,
+	})
 }
