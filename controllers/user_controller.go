@@ -16,9 +16,10 @@ import (
 
 func CreateUser(ctx *gin.Context) {
 	var body struct {
-		Name     string `json:"name"`
-		Email    string `json:"email"`
-		Password string `json:"password"`
+		FirstName string `json:"firstname"`
+		LastName  string `json:"lastname"`
+		Email     string `json:"email"`
+		Password  string `json:"password"`
 	}
 	if err := ctx.ShouldBindBodyWithJSON(&body); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid output"})
@@ -30,9 +31,10 @@ func CreateUser(ctx *gin.Context) {
 		return
 	}
 	user := models.User{
-		Name:     body.Name,
-		Email:    body.Email,
-		Password: string(hashedPass),
+		FirstName: body.FirstName,
+		LastName:  body.LastName,
+		Email:     body.Email,
+		Password:  string(hashedPass),
 	}
 	tx := initializers.Db.Create(&user)
 	if tx.Error != nil {
@@ -111,9 +113,10 @@ func Update(ctx *gin.Context) {
 		return
 	}
 	allowed := map[string]bool{
-		"name":     true,
-		"email":    true,
-		"password": true,
+		"FirstName": true,
+		"LastName":  true,
+		"email":     true,
+		"password":  true,
 	}
 	safeUpdates := map[string]interface{}{}
 	for key, value := range updates {
