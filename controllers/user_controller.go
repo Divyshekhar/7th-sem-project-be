@@ -16,12 +16,12 @@ import (
 
 func CreateUser(ctx *gin.Context) {
 	var body struct {
-		FirstName string `json:"firstname"`
-		LastName  string `json:"lastname"`
+		FirstName string `json:"firstName"`
+		LastName  string `json:"lastName"`
 		Email     string `json:"email"`
 		Password  string `json:"password"`
 	}
-	if err := ctx.ShouldBindBodyWithJSON(&body); err != nil {
+	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid output"})
 		return
 	}
@@ -62,7 +62,7 @@ func Login(ctx *gin.Context) {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
-	if err := ctx.ShouldBindBodyWithJSON(&body); err != nil {
+	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid inputs"})
 		return
 	}
