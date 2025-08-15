@@ -14,5 +14,6 @@ func RegisterUserRoutes(ctx *gin.Engine) {
 		userGroup.POST("/logout", controllers.Logout)
 		userGroup.DELETE("/delete", controllers.Delete)
 		userGroup.PATCH("/update", middleware.RequireAuth(), controllers.Update)
+		userGroup.GET("/details", middleware.RequireAuth(), controllers.GetInfo)
 	}
 }

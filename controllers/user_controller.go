@@ -150,3 +150,11 @@ func Update(ctx *gin.Context) {
 		"patient": user,
 	})
 }
+
+func GetInfo(c *gin.Context){
+	user, ok := utils.CheckUser(c)
+	if !ok{
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"message": "could not find user"})
+	}
+	c.JSON(http.StatusOK, user)
+}
