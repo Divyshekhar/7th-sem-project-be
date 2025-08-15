@@ -20,7 +20,8 @@ func main() {
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"http://localhost:3000", "https://divyshekhar.vercel.app"},
 		AllowMethods: []string{"POST", "GET", "OPTIONS", "DELETE", "PUT"},
-		AllowHeaders: []string{"Origin", "Content-Type", "Accept"},
+		AllowHeaders: []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		AllowCredentials: true,
 	}))
 
 	router.GET("/health", func(ctx *gin.Context) {
