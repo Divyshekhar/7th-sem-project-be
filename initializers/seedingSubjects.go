@@ -9,9 +9,11 @@ func SeedSubjects() error {
 		{Name: "OS"},
 		{Name: "CN"},
 		{Name: "System Design"},
-		{Name: "ML"},
 		{Name: "Compiler Design"},
 		{Name: "OOPs"},
+		{Name: "LR"},
+		{Name: "Aptitude"},
+		{Name: "HR Questions"},
 	}
 
 	for _, s := range subjects {
