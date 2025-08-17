@@ -96,6 +96,9 @@ func Login(ctx *gin.Context) {
 
 func Logout(ctx *gin.Context) {
 	ctx.SetCookie("jwt_token", "", -1, "/", "localhost", false, true)
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "user logged out",
+	})
 }
 
 // remove in prod
