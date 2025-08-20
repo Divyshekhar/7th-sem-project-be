@@ -154,10 +154,23 @@ func Update(ctx *gin.Context) {
 	})
 }
 
-func GetInfo(c *gin.Context){
+type UpdatedUser struct {
+	Id        uint
+	FirstName string
+	LastName  string
+	Email     string
+}
+
+func GetInfo(c *gin.Context) {
 	user, ok := utils.CheckUser(c)
-	if !ok{
+	if !ok {
 		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"message": "could not find user"})
 	}
-	c.JSON(http.StatusOK, user)
+	response := UpdatedUser{
+		Id: user.ID,
+		FirstName: user.FirstName,
+		LastName: user.LastName,
+		Email: user.Email,
+	}
+		c.JSON(http.StatusOK, response)
 }
