@@ -87,7 +87,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	ctx.SetSameSite(http.SameSiteLaxMode)
-	ctx.SetCookie("jwt_token", tokenStr, 0, "/", "localhost", true, true)
+	ctx.SetCookie("jwt_token", tokenStr, 3600*72, "/", "localhost", true, true)
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "User logged in",
 		"user":    user,
