@@ -50,7 +50,7 @@ func CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "error creating jwt string"})
 		return
 	}
-	ctx.SetSameSite(http.SameSiteLaxMode)
+	ctx.SetSameSite(http.SameSiteNoneMode)
 	ctx.SetCookie("jwt_token", tokenStr, 3600*72, "/", "localhost", false, true)
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "User registered successfully",
@@ -86,8 +86,8 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "error signing jwt"})
 		return
 	}
-	ctx.SetSameSite(http.SameSiteNoneMode)
-	ctx.SetCookie("jwt_token", tokenStr, 0, "/", "seventh-sem-be.onrender.com", true, true)
+	ctx.SetSameSite(http.SameSiteLaxMode)
+	ctx.SetCookie("jwt_token", tokenStr, 0, "/", "localhost", true, true)
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "User logged in",
 		"user":    user,
