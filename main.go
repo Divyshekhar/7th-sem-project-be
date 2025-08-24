@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/Divyshekhar/7th-sem-project-be/initializers"
 	"github.com/Divyshekhar/7th-sem-project-be/routes"
 	"github.com/gin-contrib/cors"
@@ -31,5 +33,7 @@ func main() {
 	routes.RegisterUserRoutes(router)
 	routes.RegisterQuestionRoutes(router)
 
-	router.Run(":8080")
+	router.Run(":"+os.Getenv("PORT"))
+	// router.RunTLS(":8080", "cert.pem", "key.pem")
+
 }

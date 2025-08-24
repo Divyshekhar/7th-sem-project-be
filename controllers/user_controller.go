@@ -86,8 +86,8 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "error signing jwt"})
 		return
 	}
-	ctx.SetSameSite(http.SameSiteLaxMode)
-	ctx.SetCookie("jwt_token", tokenStr, 3600*72, "/", "localhost", false, true)
+	ctx.SetSameSite(http.SameSiteStrictMode)
+	ctx.SetCookie("jwt_token", tokenStr, 0, "/", "localhost", true, true)
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "User logged in",
 		"user":    user,
